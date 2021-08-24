@@ -10,7 +10,9 @@ This repo details the following two pipelines
 * Pipeline to build, deploy, test and promote the cars api app
 * Setup a GitHub webhook to trigger pipeline on Github PR (pull request) actions
 
-## Build, deploy, test and promote pipeline
+![image](https://user-images.githubusercontent.com/11945086/130643919-3418ed48-f7f9-4d49-89a0-dfc5ec5981b3.png)
+
+### Build, deploy, test and promote pipeline
 The pipline does the following using Tekto
 * Create a local docker registry
 * Build the https://github.com/santoshpatil81/cars-api repo and create a docker image
@@ -19,10 +21,13 @@ The pipline does the following using Tekto
 * Run Integration tests on the DEV environment
 * Promote the changes to STAGING environent
 
+![image](https://user-images.githubusercontent.com/11945086/130644105-58acdf9d-1dcc-4514-8326-c64b8cc2a02d.png)
 
-## Github webhook pipeline
+### Github webhook pipeline
 Triggers listens for a git commit or a git pull request event. When it detects one, it 
 executes an integration test to validate the committed code.
+
+![image](https://user-images.githubusercontent.com/11945086/130644300-a9e5990c-9cf3-4b60-8dd5-90971835db1e.png)
 
 ## Pre-Requisites:
 
