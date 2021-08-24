@@ -1,0 +1,40 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: github-pr-pipeline
+spec:
+  resources:
+    - name: cars-api-git
+      type: git
+    - name: cars-api-image
+      type: image
+
+  tasks:
+    - name: pr-test
+      taskRef:
+        name: pr-test
+      resources:
+        inputs:
+          - name: cars-api-git
+            resource: cars-api-git
+          - name: cars-api-image
+            resource: cars-api-image
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: pr-test
+spec:
+  resources:
+    inputs:
+      - name: cars-api-git
+        type: git
+      - name: cars-api-image
+        type: image
+  steps:
+    - name: integration-tests
+      image: $(inputs.resources.image.url)
+      command: ["npm"]
+      args:
+        - "run"
+        - "test"

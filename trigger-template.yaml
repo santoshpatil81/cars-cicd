@@ -1,0 +1,28 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: cars-api-github-trigger-template
+spec:
+  params:
+    - name: cars-api-git-commit-id
+      description: The git revision (SHA)
+      default: master
+    - name: cars-api-git-repo-url
+      description: The git repository url ("https://github.com/santoshpatil81/cars-api.git")
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: github-pr-pipeline-run-
+      spec:
+        pipelineRef:
+          name: github-pr-pipeline
+        resources:
+          - name: cars-api-git
+            resourceSpec:
+              type: git
+              params:
+                - name: cars-api-git-commit-id
+                  value: $(tt.params.cars-api-git-commit-id)
+                - name: cars-api-git-repo-url
+                  value: $(tt.params.cars-api-git-repo-url)
