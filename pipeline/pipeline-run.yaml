@@ -3,7 +3,7 @@ kind: PipelineRun
 metadata:
   name: cars-api-pipeline-run
 spec:
-  serviceAccountName: pipeline-run-sa
+  serviceAccountName: pipeline-run-service-accnt
   pipelineRef:
     name: cars-api-pipeline
   resources:
