@@ -1,0 +1,24 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: deploy-cars-api-app
+spec:
+  inputs:
+    resources:
+      - name: source
+        type: git
+  steps:
+    - name: deploy-resources-dev
+      image: lachlanevenson/k8s-kubectl
+      command: ["kubectl"]
+      args:
+        - "apply"
+        - "-f"
+        - "$(inputs.resources.source.path)/pipeline/deploy-app.yaml"
+    - name: deploy-application-dev
+      image: lachlanevenson/k8s-kubectl
+      command: ["kubectl"]
+      args:
+        - "rollout"
+        - "restart"
+        - "deployment/cars-api-app"

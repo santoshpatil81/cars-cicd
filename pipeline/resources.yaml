@@ -1,0 +1,37 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: cars-api-git
+spec:
+  type: git
+  params:
+    - name: branch
+      value: master
+    - name: url
+      value: https://github.com/santoshpatil81/cars-api.git
+
+---
+
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: cars-api-image
+spec:
+  type: image
+  params:
+    - name: url
+      value: localhost:5000/cars-api:latest
+
+---
+
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: cars-cicd-git
+spec:
+  type: git
+  params:
+    - name: branch
+      value: master
+    - name: url
+      value: https://github.com/santoshpatil81/cars-cicd.git

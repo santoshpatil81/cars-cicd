@@ -1,0 +1,66 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: cars-api-pipeline
+spec:
+
+  resources:
+    - name: cars-api-git
+      type: git
+    - name: cars-api-image
+      type: image
+    - name: cars-cicd-git
+      type: git
+
+  tasks:
+
+    - name: create-container-registry
+      taskRef:
+        name: create-container-registry
+      resources:
+        inputs:
+          - name: source
+            resource: cars-cicd-git
+
+    - name: build-and-image-creation
+      taskRef:
+        name: build-cars-api-image
+      runAfter:
+        - create-container-registry
+      resources:
+        inputs:
+          - name: source
+            resource: cars-api-git
+        outputs:
+          - name: image
+            resource: cars-api-image
+
+    - name: deploy-dev
+      taskRef:
+        name: deploy-cars-api-app
+      runAfter:
+        - build-and-image-creation
+      resources:
+        inputs:
+          - name: source
+            resource: cars-cicd-git
+
+    - name: integration-tests
+      taskRef:
+        name: integration-tests-cars-api-app
+      runAfter:
+        - deploy-dev
+      resources:
+        inputs:
+          - name: image
+            resource: cars-api-image
+
+    - name: promote-staging
+      taskRef:
+        name: promote-cars-api-app
+      runAfter:
+        - integration-tests
+      resources:
+        inputs:
+          - name: source
+            resource: cars-cicd-git

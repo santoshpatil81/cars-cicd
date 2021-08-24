@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cars-api
+  labels:
+    app: cars-api
+spec:
+  type: NodePort
+  ports:
+    - port: 3200
+      name: cars-api
+      nodePort: 30200
+  selector:
+    app: cars-api
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cars-api
+  labels:
+    app: cars-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cars-api
+  template:
+    metadata:
+      labels:
+        app: cars-api
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: cars-api
+        image: localhost:3800/cars-api:latest
+        imagePullPolicy: "IfNotPresent"
+        ports:
+        - containerPort: 3200
+      imagePullSecrets:
+        - name: docker-registry-regcred

@@ -1,0 +1,25 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: create-container-registry
+spec:
+  inputs:
+    resources:
+      - name: source
+        type: git
+  stepTemplate:
+  steps:
+    - name: add-registry-helm-repo
+      image: lachlanevenson/k8s-helm:v3.6.3
+      command: ["helm"]
+      args:
+        - "repo"
+        - "add"
+        - "twuni"
+        - "https://helm.twun.io"
+    - name: deploy-docker-registry
+      image: lachlanevenson/k8s-helm:v3.6.3
+      command: ["helm"]
+      args:
+        - "install"
+        - "twuni/docker-registry"

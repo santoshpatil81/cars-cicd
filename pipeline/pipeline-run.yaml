@@ -1,0 +1,18 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineRun
+metadata:
+  name: cars-api-pipeline-run
+spec:
+  serviceAccountName: pipeline-run-sa
+  pipelineRef:
+    name: cars-api-pipeline
+  resources:
+    - name: cars-api-git
+      resourceRef:
+        name: cars-api-git
+    - name: cars-api-image
+      resourceRef:
+        name: cars-api-image
+    - name: cars-cicd-git
+      resourceRef:
+        name: cars-cicd-git

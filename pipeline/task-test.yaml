@@ -1,0 +1,16 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: integration-tests-cars-api-app
+spec:
+  inputs:
+    resources:
+      - name: image
+        type: image
+  steps:
+    - name: integration-tests
+      image: $(inputs.resources.image.url)
+      command: ["npm"]
+      args:
+        - "run"
+        - "test"
